@@ -1,0 +1,93 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "ticket.requests:1:1,payments.process:1:1,payments.processed:1:1,schedule.updates:1:1,ticket.validated:1:1"
+    depends_on:
+      - zookeeper
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  passenger:
+    build: ./passenger-service
+    ports:
+      - "9001:9001"
+    depends_on:
+      - kafka
+      - mongodb
+    environment:
+      KAFKA_BROKER: kafka:9092
+      MONGO_URI: mongodb://mongodb:27017/transport_db
+
+  transport:
+    build: ./transport-service
+    ports:
+      - "9002:9002"
+    depends_on:
+      - kafka
+      - mongodb
+    environment:
+      KAFKA_BROKER: kafka:9092
+      MONGO_URI: mongodb://mongodb:27017/transport_db
+
+  ticketing:
+    build: ./ticketing-service
+    ports:
+      - "9003:9003"
+    depends_on:
+      - kafka
+      - mongodb
+    environment:
+      KAFKA_BROKER: kafka:9092
+      MONGO_URI: mongodb://mongodb:27017/transport_db
+
+  payment:
+    build: ./payment-service
+    ports:
+      - "9004:9004"
+    depends_on:
+      - kafka
+      - mongodb
+    environment:
+      KAFKA_BROKER: kafka:9092
+      MONGO_URI: mongodb://mongodb:27017/transport_db
+
+  notification:
+    build: ./notification-service
+    ports:
+      - "9005:9005"
+    depends_on:
+      - kafka
+      - mongodb
+    environment:
+      KAFKA_BROKER: kafka:9092
+      MONGO_URI: mongodb://mongodb:27017/transport_db
+
+  admin:
+    build: ./admin-service
+    ports:
+      - "9006:9006"
+    depends_on:
+      - kafka
+      - mongodb
+    environment:
+      KAFKA_BROKER: kafka:9092
+      MONGO_URI: mongodb://mongodb:27017/transport_db
+
+volumes:
+  mongo-data:

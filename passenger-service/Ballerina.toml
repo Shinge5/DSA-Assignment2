@@ -1,0 +1,18 @@
+[package]
+org = "https://github.com/Shinge5/DSA-Assignment2.git"
+name = "passenger_service"
+version = "0.1.0"
+distribution = "2201.12.9"
+
+[[dependency]]
+org = "ballerinax"
+name = "kafka"
+version = "latest"  # Or the version added, e.g., "3.0.0"
+
+[[dependency]]
+org = "ballerinax"
+name = "mongodb"
+version = "latest"  # Or the version added
+
+[build-options]
+observabilityIncluded = true

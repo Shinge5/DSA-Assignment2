@@ -1,0 +1,5 @@
+[container.image]
+repository="yourdockerhub"  # Optional: your Docker Hub username/repo if pushing images
+name="service_name"  # e.g., passenger-service
+tag="v1.0"
+buildImage=true
