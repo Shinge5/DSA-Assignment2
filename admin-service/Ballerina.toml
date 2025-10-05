@@ -1,21 +1,14 @@
 [package]
-org = "administrator"
-name = "admin_service"
-version = "0.1.0"
-distribution = "2201.12.9"
+org = "windhoektransit"
+name = "passenger_service"
+version = "1.0.0"
 
 [[dependency]]
 org = "ballerinax"
 name = "kafka"
-version = "latest"  # Or the version added, e.g., "3.0.0"
+version = "4.2.0"
 
 [[dependency]]
 org = "ballerinax"
 name = "mongodb"
-version = "latest"  # Or the version added
-
-[build-options]
-cloud = "docker"
-
-[build-options]
-observabilityIncluded = true
+version = "1.7.0"
